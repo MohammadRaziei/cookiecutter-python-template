@@ -91,6 +91,7 @@ After generating your project, you can use the following commands to ensure code
 python -m pytest
 ```
 or
+
 ```bash
 hatch run test
 ```
@@ -102,17 +103,30 @@ Runs all tests using **pytest**.
 python -m pytest --cov
 ```
 or
+
 ```bash
 hatch run cov
 ```
 Runs tests and generates a coverage report.
 
+To generate an HTML coverage report (viewable in your browser):
+
+```bash
+python -m pytest --cov --cov-report=term --cov-report=html
+```
+or
+
+```bash
+hatch run cov
+coverage html
+```
 ### 🧹 Run Linter & Formatter
 
 ```bash
 python -m ruff check .
 ```
 or
+
 ```bash
 hatch run lint:all
 ```
@@ -124,6 +138,7 @@ Checks code style and type hints using **ruff**, **black**, and **mypy**.
 python -m ruff check --fix .
 ```
 or
+
 ```bash
 hatch run lint:fmt
 ```
