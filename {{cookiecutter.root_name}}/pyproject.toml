@@ -109,24 +109,25 @@ pythonpath = [
 target-version = "py37"
 line-length = 120
 
-[tool.ruff.lint]
-select = [
-  "A", "ARG",
-  "B",
-  "C",
-  "DTZ",
-  "E", "EM",
-  "F", "FBT",
-  "I", "ICN", "ISC",
-  "N",
-  "PLC", "PLE", "PLR", "PLW",
-  "Q",
-  "RUF",
-  "S",
-  "T", "TID",
-  "UP",
-  "W",
-  "YTT",
+[tool.ruff.lint]  # Ruff linting configuration
+select = [        # List of lint rule codes to enable
+  "A",            # Built-in rules for potential errors
+  "ARG",          # Argument-related checks
+  "B",            # Bugbear: likely bugs and design problems
+  "C",            # Complexity checks
+  "DTZ",          # Datetime-related issues
+  "E", "EM",      # pycodestyle errors, error messages
+  "F", "FBT",     # Pyflakes, boolean trap checks
+  "I", "ICN", "ISC", # Import sorting, conventions, string concatenation
+  "N",            # Naming conventions
+  "PLC", "PLE", "PLR", "PLW", # Pylint checks (convention, error, refactor, warning)
+  "Q",            # Quotes
+  "RUF",          # Ruff-specific rules
+  "S",            # Security issues
+  "T", "TID",     # Type annotations, tidy imports
+  "UP",           # pyupgrade: modernize code
+  "W",            # pycodestyle warnings
+  "YTT",          # sys.version checks
 ]
 ignore = [
   # Allow non-abstract empty methods in abstract base classes
