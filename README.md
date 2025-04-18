@@ -34,6 +34,41 @@ All configurations are pre-set, so you get a clean, maintainable, and production
 
 ---
 
+## ⚙️ Prerequisites
+
+Before you start, make sure you have the following installed:
+
+- 🐍 **Python 3.7 or higher**  
+  Download from [python.org](https://www.python.org/downloads/)
+
+- 🍪 **Cookiecutter**  
+  Install via pip:
+  ```bash
+  pip install cookiecutter
+  ```
+
+- 🚀 **Hatch** (for development, testing, and linting)  
+  Install via pip:
+  ```bash
+  pip install hatch
+  ```
+
+- 🧪 **pytest** and **pytest-cov** (for running tests and coverage)  
+  Install via pip (if you want to run tests directly, outside Hatch):
+  ```bash
+  pip install pytest pytest-cov
+  ```
+
+- 🧹 **ruff** (for linting and formatting)  
+  Install via pip (if you want to run linting directly, outside Hatch):
+  ```bash
+  pip install ruff
+  ```
+
+> 💡 If you use Hatch (recommended), it will automatically manage these dependencies for you in isolated environments.
+
+---
+
 ## 🚀 How to Use
 
 To generate a new Python project using this template, run:
