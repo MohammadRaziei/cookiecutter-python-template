@@ -46,6 +46,56 @@ You will be prompted for project-specific information (name, description, author
 
 ---
 
+## 🧪 Running Tests, Coverage & Linting
+
+After generating your project, you can use the following commands to ensure code quality and correctness:
+
+### 🧪 Run Tests
+
+```bash
+python -m pytest
+```
+or
+```bash
+hatch run test
+```
+Runs all tests using **pytest**.
+
+### 📊 Run Tests with Coverage
+
+```bash
+python -m pytest --cov
+```
+or
+```bash
+hatch run cov
+```
+Runs tests and generates a coverage report.
+
+### 🧹 Run Linter & Formatter
+
+```bash
+python -m ruff check .
+```
+or
+```bash
+hatch run lint:all
+```
+Checks code style and type hints using **ruff**, **black**, and **mypy**.
+
+### 🎨 Auto-format Code
+
+```bash
+python -m ruff check --fix .
+```
+or
+```bash
+hatch run lint:fmt
+```
+Automatically formats your code and fixes lint issues.
+
+---
+
 ## ✨ Features
 
 - 🤖 Automated setup for testing, linting, and formatting
@@ -61,14 +111,18 @@ You will be prompted for project-specific information (name, description, author
 A typical generated project will look like:
 
 ```
-project_name/
+my_project/
 ├── src/
-│   └── your_module/
+│   └── my_package/
+│       ├── __init__.py
+│       ├── core.py
+│       └── utils.py
 ├── tests/
-├── requirements.txt
+│   └── test_example.py
 ├── pyproject.toml
 ├── README.md
-└── ...
+├── .gitignore
+└── requirements.txt
 ```
 
 ---
