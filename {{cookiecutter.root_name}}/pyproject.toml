@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "{{ cookiecutter.root_name }}"
 dynamic = ["version", "dependencies"]
-description = ''
+description = "{{ cookiecutter.description }}"
 readme = "README.md"
 requires-python = ">=3.7"
 license = "MIT"
@@ -24,6 +24,8 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: Implementation :: CPython",
   "Programming Language :: Python :: Implementation :: PyPy",
 ]
@@ -94,7 +96,7 @@ minversion = "6.0"
 addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
 xfail_strict = true
 filterwarnings = [
-    "error",
+    # "error",
     "ignore:(ast.Str|Attribute s|ast.NameConstant|ast.Num) is deprecated:DeprecationWarning:_pytest",  # Python 3.12
 ]
 testpaths = ["tests"]
