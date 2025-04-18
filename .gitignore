@@ -15,3 +15,4 @@ venv*/
 
 # Ignore cache directory
 __pycache__
+.qodo
