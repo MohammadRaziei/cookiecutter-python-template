@@ -146,10 +146,11 @@ Automatically formats your code and fixes lint issues.
 A typical generated project will look like:
 
 ```
-my_project/
+my-project/
 ├── src/
 │   └── my_package/
 │       ├── __init__.py
+│       ├── __about__.py
 │       ├── core.py
 │       └── utils.py
 ├── tests/
