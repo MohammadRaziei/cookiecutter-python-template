@@ -27,14 +27,11 @@ jobs:
         run: |
           python3 -m cookiecutter . --no-input project_name="test_project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
 
-      - name: Display structure of files
-        run: ls -R 
-
       - name: Upload generated project artifact
         uses: actions/upload-artifact@v4
         with:
           name: generated-project # Name of the artifact
-          path: test_project/* # Upload the entire generated directory
+          path: test-project/* # Upload the entire generated directory
           if-no-files-found: error # Fail the job if no files are found
           overwrite: true # Overwrite existing files
           include-hidden-files: true # Include hidden files
