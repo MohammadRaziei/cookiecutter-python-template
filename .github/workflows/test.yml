@@ -32,6 +32,9 @@ jobs:
         with:
           name: generated-project # Name of the artifact
           path: test_project/* # Upload the entire generated directory
+          if-no-files-found: error # Fail the job if no files are found
+          overwrite: true # Overwrite existing files
+          include-hidden-files: true # Include hidden files
 
   test-generated-project: # New job for testing
     name: Test Generated Project
@@ -44,6 +47,7 @@ jobs:
         with:
           name: generated-project # Must match the upload name
           path: . # Download into a directory named test_project
+          
 
       - name: Set up Python for generated project
         uses: actions/setup-python@v4
