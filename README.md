@@ -1,5 +1,7 @@
 # 🍪 Cookiecutter Python Template 🐍
 
+[![CI](https://github.com/mohammadraziei/cookiecutter-python-template/actions/workflows/test.yml/badge.svg)](https://github.com/mohammadraziei/cookiecutter-python-template/actions/workflows/test.yml)
+
 A modern, opinionated Cookiecutter template for quickly bootstrapping clean, production-ready Python projects.
 
 ---
