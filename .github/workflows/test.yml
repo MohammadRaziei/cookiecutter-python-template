@@ -33,29 +33,26 @@ jobs:
           python-version: "3.10"
 
       - name: Install dependencies for generated project
+        working-directory: ./test_project # Set the working directory here
         run: |
-          cd test_project
           pip install -r requirements.txt || true
           pip install hatch
 
       - name: Run Ruff linter
-        run: |
-          cd test_project
-          hatch run lint:all
+        working-directory: ./test_project # Set the working directory here
+        run: hatch run lint:all
 
       - name: Run tests with pytest
-        run: |
-          cd test_project
-          hatch run test
+        working-directory: ./test_project # Set the working directory here
+        run: hatch run test
 
       - name: Build the package
-        run: |
-          cd test_project
-          hatch build
+        working-directory: ./test_project # Set the working directory here
+        run: hatch build
 
       - name: Install the built package
+        working-directory: ./test_project # Set the working directory here
         run: |
-          cd test_project
           pip install dist/*.whl
 
   # Badge job (using shields.io)
