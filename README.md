@@ -39,6 +39,18 @@ All configurations are pre-set, so you get a clean, maintainable, and production
 
 ---
 
+## 🚀 How to Use
+
+To generate a new Python project using this template, run:
+
+```sh
+python -m cookiecutter gh:mohammadraziei/cookiecutter-python-template
+```
+
+You will be prompted for project-specific information (name, description, author, etc.), and a new project directory will be created with all the necessary files and structure.
+
+---
+
 ## ⚙️ Prerequisites
 
 Before you start, make sure you have the following installed:
@@ -71,18 +83,6 @@ Before you start, make sure you have the following installed:
   ```
 
 > 💡 If you use Hatch (recommended), it will automatically manage these dependencies for you in isolated environments.
-
----
-
-## 🚀 How to Use
-
-To generate a new Python project using this template, run:
-
-```sh
-python -m cookiecutter gh:mohammadraziei/cookiecutter-python-template
-```
-
-You will be prompted for project-specific information (name, description, author, etc.), and a new project directory will be created with all the necessary files and structure.
 
 ---
 
