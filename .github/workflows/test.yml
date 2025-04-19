@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  cookiecutter-template-test:
+    name: Test Cookiecutter Template
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout template repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Cookiecutter
+        run: pip install cookiecutter
+
+      - name: Generate project from template
+        run: |
+          cookiecutter . --no-input project_name="test_project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
+
+      - name: Set up Python for generated project
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies for generated project
+        run: |
+          cd test_project
+          pip install -r requirements.txt || true
+          pip install hatch
+
+      - name: Run Ruff linter
+        run: |
+          cd test_project
+          hatch run lint:all
+
+      - name: Run tests with pytest
+        run: |
+          cd test_project
+          hatch run test
+
+      - name: Build the package
+        run: |
+          cd test_project
+          hatch build
+
+      - name: Install the built package
+        run: |
+          cd test_project
+          pip install dist/*.whl
+
+  # Badge job (using shields.io)
+  badge:
+    name: Test Status Badge
+    needs: cookiecutter-template-test
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Create test badge
+        uses: emibcn/badge-action@v2
+        with:
+          label: 'tests'
+          status: ${{ needs.cookiecutter-template-test.result }}
+          color: ${{ needs.cookiecutter-template-test.result == 'success' && 'brightgreen' || 'red' }}
+          path: test-badge.svg
+
+      - name: Upload badge artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-badge
+          path: test-badge.svg

@@ -1,0 +1,100 @@
+name: wheel
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+     - main
+  release:
+    types:
+      - published
+
+env:
+  FORCE_COLOR: 3
+
+concurrency:
+  group: {{ '${{ github.workflow }}-${{ github.ref }}' }}
+  cancel-in-progress: true
+
+jobs:
+  build_wheel:
+    name: Build Wheel
+#    description: Build SDist with Wheel and also run a test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        lfs: true
+        submodules: true
+
+    - uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Setup Python
+      run: pip install -q build pytest-cov
+
+    - name: Build SDist
+      run: python -m build
+
+    - name: Installing tests requirements
+      run: pip install -q -r requirements.txt
+
+    - name: Run tests
+      run: python -m pytest --cov
+
+    - uses: actions/upload-artifact@v4
+      with:
+        path: dist/*
+        name: wheels
+        overwrite: true
+
+
+  pre_release:
+    name: Pre-release
+#    description: Running linter and checking the wheels
+    needs: [ build_wheel ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - uses: actions/download-artifact@v3
+        with:
+          name: wheels
+          path: dist
+
+      - name: Ruff Check # TODO: remove this
+        uses: jpetrucciani/ruff-check@main
+
+      - name: Check metadata
+        run: pipx run twine check dist/*
+
+
+  upload_all:
+    name: Release
+#    description: Upload if release
+    needs: [pre_release]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release' && github.event.action == 'published'
+
+    steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: artifact
+        path: dist
+
+    - name: Publish package to PyPI
+      uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        password: {{ '${{ secrets.PYPI_PASSWORD }}' }}
+        user: {{ '${{ secrets.PYPI_USERNAME }}' }}
+        # repository-url: https://test.pypi.org/legacy/
+
+        
+        
+        
+        
