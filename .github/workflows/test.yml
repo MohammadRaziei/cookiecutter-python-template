@@ -27,8 +27,8 @@ jobs:
         run: |
           python3 -m cookiecutter . --no-input project_name="test_project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
 
-      - name: Display structure of downloaded files
-        run: ls -R test_project
+      - name: Display structure of files
+        run: ls -R 
 
       - name: Upload generated project artifact
         uses: actions/upload-artifact@v4
