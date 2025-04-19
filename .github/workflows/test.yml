@@ -2,13 +2,13 @@ name: CI
 
 on:
   push:
-    branches: [master]
+    branches: [master] # Note: Consider changing 'master' to 'main' if that's your default branch
   pull_request:
   workflow_dispatch:
 
 jobs:
-  cookiecutter-template-test:
-    name: Test Cookiecutter Template
+  generate-project: # Renamed the first job
+    name: Generate Project from Template
     runs-on: ubuntu-latest
 
     steps:
@@ -27,38 +27,50 @@ jobs:
         run: |
           cookiecutter . --no-input project_name="test_project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
 
+      - name: Upload generated project artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-project # Name of the artifact
+          path: test_project/* # Upload the entire generated directory
+
+  test-generated-project: # New job for testing
+    name: Test Generated Project
+    needs: generate-project # Depends on the first job
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download generated project artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: generated-project # Must match the upload name
+          path: . # Download into a directory named test_project
+
       - name: Set up Python for generated project
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
 
       - name: Install dependencies for generated project
-        working-directory: ./test_project # Set the working directory here
         run: |
-          pip install -r requirements.txt || true
+          pip install -r requirements.txt
           pip install hatch
 
       - name: Run Ruff linter
-        working-directory: ./test_project # Set the working directory here
         run: hatch run lint:all
 
       - name: Run tests with pytest
-        working-directory: ./test_project # Set the working directory here
         run: hatch run test
 
       - name: Build the package
-        working-directory: ./test_project # Set the working directory here
         run: hatch build
 
       - name: Install the built package
-        working-directory: ./test_project # Set the working directory here
-        run: |
-          pip install dist/*.whl
+        run: pip install dist/*.whl
 
   # Badge job (using shields.io)
   badge:
     name: Test Status Badge
-    needs: cookiecutter-template-test
+    needs: test-generated-project # Now depends on the second job
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -66,12 +78,6 @@ jobs:
         uses: emibcn/badge-action@v2
         with:
           label: 'tests'
-          status: ${{ needs.cookiecutter-template-test.result }}
-          color: ${{ needs.cookiecutter-template-test.result == 'success' && 'brightgreen' || 'red' }}
-          path: test-badge.svg
-
-      - name: Upload badge artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-badge
-          path: test-badge.svg
+          status: ${{ needs.test-generated-project.result }} # Check result of the second job
+          color: ${{ needs.test-generated-project.result == 'success' && 'brightgreen' || 'red' }}
+          path: 'output/coverage.svg' # Consider changing the path if needed, e.g., 'test-badge.svg'
