@@ -80,4 +80,4 @@ jobs:
           label: 'tests'
           status: ${{ needs.test-generated-project.result }} # Check result of the second job
           color: ${{ needs.test-generated-project.result == 'success' && 'brightgreen' || 'red' }}
-          path: 'output/coverage.svg' # Consider changing the path if needed, e.g., 'test-badge.svg'
+          path: test-badge.svg
