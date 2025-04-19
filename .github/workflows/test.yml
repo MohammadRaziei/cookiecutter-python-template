@@ -60,10 +60,10 @@ jobs:
           pip install hatch
 
       - name: Run Ruff linter
-        run: hatch run lint:all
+        run: ruff check . 
 
       - name: Run tests with pytest
-        run: hatch run test
+        run: pytest --cov --cov-report=term
 
       - name: Build the package
         run: hatch build
