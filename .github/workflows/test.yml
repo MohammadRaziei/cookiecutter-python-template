@@ -57,7 +57,7 @@ jobs:
       - name: Install dependencies for generated project
         run: |
           pip install -r requirements.txt
-          pip install hatch
+          pip install hatch pytest-cov ruff
 
       - name: Run Ruff linter
         run: ruff check . 
