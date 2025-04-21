@@ -24,7 +24,7 @@ jobs:
         run: |
           python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="test_project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
           mv test-project/* .
-          rmdir test-project
+          rm -r test-project
                 
       - name: Set up Python for generated project
         uses: actions/setup-python@v4
