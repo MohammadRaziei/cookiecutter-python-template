@@ -7,14 +7,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-project: # Renamed the first job
-    name: Generate Project from Template
+  test-project: # New job for testing
+    name: Generate and Test Project from Template
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout template repository
-        uses: actions/checkout@v3
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
@@ -25,30 +22,10 @@ jobs:
 
       - name: Generate project from template
         run: |
-          python3 -m cookiecutter . --no-input project_name="test_project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
-
-      - name: Upload generated project artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: generated-project # Name of the artifact
-          path: test-project/* # Upload the entire generated directory
-          if-no-files-found: error # Fail the job if no files are found
-          overwrite: true # Overwrite existing files
-          include-hidden-files: true # Include hidden files
-
-  test-generated-project: # New job for testing
-    name: Test Generated Project
-    needs: generate-project # Depends on the first job
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download generated project artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: generated-project # Must match the upload name
-          path: . # Download into a directory named test_project
-          
-
+          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="test_project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
+          mv test-project/* .
+          rmdir test-project
+                
       - name: Set up Python for generated project
         uses: actions/setup-python@v4
         with:
@@ -74,7 +51,7 @@ jobs:
   # Badge job (using shields.io)
   badge:
     name: Test Status Badge
-    needs: test-generated-project # Now depends on the second job
+    needs: test-project # Now depends on the second job
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -82,6 +59,6 @@ jobs:
         uses: emibcn/badge-action@v2
         with:
           label: 'tests'
-          status: ${{ needs.test-generated-project.result }} # Check result of the second job
-          color: ${{ needs.test-generated-project.result == 'success' && 'brightgreen' || 'red' }}
+          status: ${{ needs.test-project.result }} # Check result of the second job
+          color: ${{ needs.test-project.result == 'success' && 'brightgreen' || 'red' }}
           path: test-badge.svg
