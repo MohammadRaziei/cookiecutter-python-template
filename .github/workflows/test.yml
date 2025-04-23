@@ -48,10 +48,52 @@ jobs:
       - name: Install the built package
         run: pip install dist/*.whl
 
+  test-project-new: # New job for testing
+    name: Generate and Test Project from Template
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install Cookiecutter
+        run: pip install cookiecutter
+
+      - name: Generate project from template
+        run: |
+          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="test_project_new" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
+          mv test-project-new/* .
+          rm -r test-project-new
+                
+      - name: Set up Python for generated project
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies for generated project
+        run: |
+          pip install -r requirements.txt
+          pip install hatch pytest-cov ruff
+
+      - name: Run Ruff linter
+        run: ruff check . 
+
+      - name: Run tests with pytest
+        run: pytest --cov --cov-report=term
+
+      - name: Build the package
+        run: hatch build
+
+      - name: Install the built package
+        run: pip install dist/*.whl
+
+
   # Badge job (using shields.io)
   badge:
     name: Test Status Badge
-    needs: test-project # Now depends on the second job
+    needs: [test-project, test-project-new] # Now depends on the second job
     runs-on: ubuntu-latest
     if: always()
     steps:
