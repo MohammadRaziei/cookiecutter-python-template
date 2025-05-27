@@ -43,6 +43,9 @@ Documentation = "{{ 'https://' + cookiecutter.git_repo.split('/')[3] + '.' + coo
 [tool.hatch.version]
 path = "src/{{ cookiecutter.module_name }}/__about__.py"
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/{{cookiecutter.module_name}}"]
+
 [tool.hatch.envs.default]
 dependencies = [
   "coverage[toml]>=6.5",
@@ -70,6 +73,7 @@ dependencies = [
   "mypy>=1.0.0",
   "ruff>=0.0.243",
 ]
+
 [tool.hatch.envs.lint.scripts]
 typing = "mypy --install-types --non-interactive {args:src/{{cookiecutter.module_name}} tests}"
 style = [
