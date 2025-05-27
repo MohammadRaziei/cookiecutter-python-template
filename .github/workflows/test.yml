@@ -47,8 +47,9 @@ jobs:
       - name: Install the built package
         run: pip install dist/*.whl
 
-  : # New job for testing
-    name: Generate and Test Project from Template
+
+  project-with-different-module-name: # New job for testing
+    name: Generate and Test Project from Template (With different module name)
     runs-on: ubuntu-latest
 
     steps:
@@ -91,7 +92,7 @@ jobs:
   # Badge job (using shields.io)
   badge:
     name: Test Status Badge
-    needs: [test-project, test-project-new] # Now depends on the second job
+    needs: [simple-project, project-with-different-module-name] # Now depends on the second job
     runs-on: ubuntu-latest
     if: always()
     steps:
