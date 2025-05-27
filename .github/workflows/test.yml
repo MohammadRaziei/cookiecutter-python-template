@@ -48,7 +48,7 @@ jobs:
         run: |
           ruff check . 
           # or
-          hatch run lint:all
+          # hatch run lint:all
 
       - name: Run tests with pytest
         run: |
