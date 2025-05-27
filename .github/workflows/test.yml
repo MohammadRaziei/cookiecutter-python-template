@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-project: # New job for testing
+  simple-project: # New job for testing
     name: Generate and Test Project from Template
     runs-on: ubuntu-latest
 
@@ -22,9 +22,8 @@ jobs:
 
       - name: Generate project from template
         run: |
-          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="ci test project" description="Test project" module_name="ci_test_project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
-          mv test-project/* .
-          rm -r test-project
+          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="ci test project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
+          mv ci-test-project/* . && rm -r ci-test-project
                 
       - name: Set up Python for generated project
         uses: actions/setup-python@v4
@@ -48,7 +47,7 @@ jobs:
       - name: Install the built package
         run: pip install dist/*.whl
 
-  test-project-new: # New job for testing
+  : # New job for testing
     name: Generate and Test Project from Template
     runs-on: ubuntu-latest
 
@@ -64,8 +63,7 @@ jobs:
       - name: Generate project from template
         run: |
           python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="ci test project" description="Test project" module_name="test_project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
-          mv test-project-new/* .
-          rm -r test-project-new
+          mv ci-test-project/* . && rm -r ci-test-project
                 
       - name: Set up Python for generated project
         uses: actions/setup-python@v4
