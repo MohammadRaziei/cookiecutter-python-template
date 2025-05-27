@@ -2,14 +2,21 @@ name: CI
 
 on:
   push:
-    branches: [master] # Note: Consider changing 'master' to 'main' if that's your default branch
+    branches: [master]
   pull_request:
   workflow_dispatch:
 
 jobs:
-  simple-project: # New job for testing
-    name: Generate and Test Project from Template
+  test-project:
+    name: Generate and Test Project (${{ matrix.name }})
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: "Simple Project"
+            extra_vars: ""
+          - name: "With Different Module Name"
+            extra_vars: "module_name=\"test_project\""
 
     steps:
       - name: Set up Python
@@ -22,77 +29,46 @@ jobs:
 
       - name: Generate project from template
         run: |
-          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="ci test project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
+          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template \
+            --no-input \
+            project_name="ci test project" \
+            description="Test project" \
+            author_name="Test Author" \
+            author_email="test@example.com" \
+            git_username="testuser" \
+            ${{ matrix.extra_vars }}
           mv ci-test-project/* . && rm -r ci-test-project
-                
-      - name: Set up Python for generated project
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
 
       - name: Install dependencies for generated project
         run: |
           pip install -r requirements.txt
-          pip install hatch pytest-cov ruff
+          pip install hatch pytest-cov ruff build
 
       - name: Run Ruff linter
-        run: ruff check . 
+        run: |
+          ruff check . 
+          # or
+          hatch run lint:all
 
       - name: Run tests with pytest
-        run: pytest --cov --cov-report=term
+        run: |
+          pytest --cov --cov-report=term
+          # or
+          hatch run test
 
       - name: Build the package
-        run: hatch build
+        run: |
+          python -m build
+          # or
+          hatch build
 
       - name: Install the built package
         run: pip install dist/*.whl
-
-
-  project-with-different-module-name: # New job for testing
-    name: Generate and Test Project from Template (With different module name)
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Install Cookiecutter
-        run: pip install cookiecutter
-
-      - name: Generate project from template
-        run: |
-          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="ci test project" description="Test project" module_name="test_project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
-          mv ci-test-project/* . && rm -r ci-test-project
-                
-      - name: Set up Python for generated project
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-
-      - name: Install dependencies for generated project
-        run: |
-          pip install -r requirements.txt
-          pip install hatch pytest-cov ruff
-
-      - name: Run Ruff linter
-        run: ruff check . 
-
-      - name: Run tests with pytest
-        run: pytest --cov --cov-report=term
-
-      - name: Build the package
-        run: hatch build
-
-      - name: Install the built package
-        run: pip install dist/*.whl
-
 
   # Badge job (using shields.io)
   badge:
     name: Test Status Badge
-    needs: [simple-project, project-with-different-module-name] # Now depends on the second job
+    needs: [test-project]
     runs-on: ubuntu-latest
     if: always()
     steps:
@@ -100,6 +76,6 @@ jobs:
         uses: emibcn/badge-action@v2
         with:
           label: 'tests'
-          status: ${{ needs.test-project.result }} # Check result of the second job
+          status: ${{ needs.test-project.result }}
           color: ${{ needs.test-project.result == 'success' && 'brightgreen' || 'red' }}
           path: test-badge.svg
