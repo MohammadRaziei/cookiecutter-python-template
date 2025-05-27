@@ -22,7 +22,7 @@ jobs:
 
       - name: Generate project from template
         run: |
-          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="test_project" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
+          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="ci test project" description="Test project" module_name="ci_test_project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
           mv test-project/* .
           rm -r test-project
                 
@@ -63,7 +63,7 @@ jobs:
 
       - name: Generate project from template
         run: |
-          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="test_project_new" description="Test project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
+          python3 -m cookiecutter gh:mohammadraziei/cookiecutter-python-template --no-input project_name="ci test project" description="Test project" module_name="test_project" author_name="Test Author" author_email="test@example.com" git_username="testuser"
           mv test-project-new/* .
           rm -r test-project-new
                 
