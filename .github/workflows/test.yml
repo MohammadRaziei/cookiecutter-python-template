@@ -13,10 +13,14 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: "Simple Project"
-            extra_vars: ""
-          - name: "With Different Module Name"
-            extra_vars: "module_name=\"test_project\""
+          - name: "Simple Project - src layout"
+            extra_vars: "layout=\"src\""
+          - name: "With Different Module Name - src layout"
+            extra_vars: "module_name=\"test_project\" layout=\"src\""
+          - name: "Simple Project - flat layout"
+            extra_vars: "layout=\"flat\""
+          - name: "With Different Module Name - flat layout"
+            extra_vars: "module_name=\"test_project\" layout=\"flat\""
 
     steps:
       - name: Set up Python

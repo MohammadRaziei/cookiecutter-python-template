@@ -1,6 +1,7 @@
 {
     "project_name": "",
     "description": "",
+    "layout": ["src", "flat"],
     "root_name": "{{ cookiecutter.project_name.lower().replace(' ','-').replace('_', '-').replace('--', '-') }}",
     "module_name": "{{ cookiecutter.root_name.replace('-', '_') }}",
     "git_hosting": "github.com",

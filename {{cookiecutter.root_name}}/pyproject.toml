@@ -41,10 +41,10 @@ Documentation = "{{ 'https://' + cookiecutter.git_repo.split('/')[3] + '.' + coo
 
 
 [tool.hatch.version]
-path = "src/{{ cookiecutter.module_name }}/__about__.py"
+path = "{% if cookiecutter.layout == 'src' %}src/{% endif %}{{ cookiecutter.module_name }}/__about__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/{{cookiecutter.module_name}}"]
+packages = ["{% if cookiecutter.layout == 'src' %}src/{% endif %}{{cookiecutter.module_name}}"]
 
 [tool.hatch.envs.default]
 dependencies = [
@@ -75,7 +75,7 @@ dependencies = [
 ]
 
 [tool.hatch.envs.lint.scripts]
-typing = "mypy --install-types --non-interactive {args:src/{{cookiecutter.module_name}} tests}"
+typing = "mypy --install-types --non-interactive {args:{% if cookiecutter.layout == 'src' %}src/{% endif %}{{cookiecutter.module_name}} tests}"
 style = [
   "ruff check {args:.}",
   "black --check --diff {args:.}",
@@ -105,7 +105,7 @@ filterwarnings = [
 ]
 testpaths = ["tests"]
 pythonpath = [
-  "src"
+  "{% if cookiecutter.layout == 'src' %}src{% else %}.{% endif %}"
 ]
 
 
@@ -168,12 +168,12 @@ source_pkgs = ["{{ cookiecutter.module_name }}"]
 branch = true
 parallel = true
 omit = [
-  "src/{{ cookiecutter.module_name }}/__about__.py",
+  "{% if cookiecutter.layout == 'src' %}src/{% endif %}{{ cookiecutter.module_name }}/__about__.py",
 ]
 
 
 [tool.coverage.paths]
-{{ cookiecutter.module_name }} = ["src/{{ cookiecutter.module_name }}"]
+{{ cookiecutter.module_name }} = ["{% if cookiecutter.layout == 'src' %}src/{% endif %}{{ cookiecutter.module_name }}"]
 tests = ["tests"]
 
 [tool.coverage.report]
