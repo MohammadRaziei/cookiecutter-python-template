@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-project:
-    name: Generate and Test Project (${{ matrix.name }})
+    name: Generate ${{ matrix.name }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
